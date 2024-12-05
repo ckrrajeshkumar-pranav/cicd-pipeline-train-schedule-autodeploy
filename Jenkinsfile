@@ -11,7 +11,7 @@ pipeline {
         }
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/<your-username>/cicd-pipeline-train-schedule-autodeploy.git'
+                git branch: 'main', url: 'https://github.com/ckrrajeshkumar-pranav/cicd-pipeline-train-schedule-autodeploy.git'
             }
         }
         stage('Build Docker Image') {

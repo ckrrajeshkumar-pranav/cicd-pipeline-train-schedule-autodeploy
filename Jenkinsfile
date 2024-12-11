@@ -14,6 +14,13 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/ckrrajeshkumar-pranav/cicd-pipeline-train-schedule-autodeploy.git'
             }
         }
+        stage('Build Application') {
+            steps {
+                script {
+                    sh './gradlew build --no-daemon'
+                }
+            }
+        }
         stage('Build Docker Image') {
             steps {
                 script {
@@ -34,8 +41,11 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 script {
-                    sh """
+                     sh """
+                    kubernetesDeploy(configs: "deployment.yaml", "service.yaml", kubeconfigID: "kube")
+                    kubectl config use-context your-cluster-context
                     kubectl set image deployment/train-schedule train-schedule=$DOCKER_IMAGE:$DOCKER_TAG
+                    kubectl rollout status deployment/train-schedule
                     """
                 }
             }
